@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,16 +6,24 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { LogIn } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { isAuthenticated, checkAuth } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     contactNumber: "",
     firstName: "",
     lastName: "",
   });
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/assessment');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,6 +39,7 @@ const Login = () => {
 
     // Store user data in localStorage
     localStorage.setItem("cryptoquest_user", JSON.stringify(formData));
+    checkAuth();
     
     toast({
       title: "Success",
@@ -50,16 +59,14 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-crypto-electric/5 via-background to-crypto-neon/5 px-4 py-12">
-      <Card className="w-full max-w-md border-2 border-border bg-card shadow-lg shadow-crypto-electric/5">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12">
+      <Card className="w-full max-w-md border border-border bg-card shadow-lg">
         <CardHeader className="space-y-2 text-center">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-crypto-electric/10 mb-4">
-            <LogIn className="h-6 w-6 text-crypto-electric" />
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 mb-4">
+            <LogIn className="h-6 w-6 text-primary" />
           </div>
-          <CardTitle className="text-2xl sm:text-3xl font-bold">
-            <span className="bg-gradient-to-r from-crypto-electric to-crypto-neon bg-clip-text text-transparent">
-              Welcome to CryptoQuest
-            </span>
+          <CardTitle className="text-2xl sm:text-3xl font-bold text-foreground">
+            Welcome to CryptoQuest
           </CardTitle>
           <CardDescription className="text-base">
             Sign in to start your personalized trading assessment
@@ -128,7 +135,7 @@ const Login = () => {
             </div>
             <Button
               type="submit"
-              className="w-full bg-crypto-electric text-crypto-navy hover:bg-crypto-electric/90 font-semibold"
+              className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold"
               size="lg"
             >
               Continue to Assessment

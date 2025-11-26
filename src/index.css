@@ -56,47 +56,47 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 216 43% 5%;
-    --foreground: 210 40% 98%;
+    --background: 27 50% 97%;
+    --foreground: 0 0% 15%;
 
-    --card: 216 50% 8%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 15%;
 
-    --popover: 216 50% 8%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 15%;
 
-    --primary: 196 94% 61%;
-    --primary-foreground: 216 43% 5%;
+    --primary: 14 100% 64%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 216 50% 12%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 27 50% 95%;
+    --secondary-foreground: 0 0% 15%;
 
-    --muted: 216 50% 12%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 27 30% 92%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 158 100% 63%;
-    --accent-foreground: 216 43% 5%;
+    --accent: 14 100% 64%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 216 50% 15%;
-    --input: 216 50% 12%;
-    --ring: 196 94% 61%;
+    --border: 27 30% 88%;
+    --input: 27 30% 92%;
+    --ring: 14 100% 64%;
     
-    --sidebar-background: 216 50% 8%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 196 94% 61%;
-    --sidebar-primary-foreground: 216 43% 5%;
-    --sidebar-accent: 216 50% 12%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 216 50% 15%;
-    --sidebar-ring: 196 94% 61%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 15%;
+    --sidebar-primary: 14 100% 64%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 27 50% 95%;
+    --sidebar-accent-foreground: 0 0% 15%;
+    --sidebar-border: 27 30% 88%;
+    --sidebar-ring: 14 100% 64%;
     
-    --crypto-electric: 196 94% 61%;
-    --crypto-navy: 216 43% 5%;
-    --crypto-neon: 158 100% 63%;
-    --crypto-glow: 196 94% 61%;
+    --crypto-electric: 14 100% 64%;
+    --crypto-navy: 0 0% 15%;
+    --crypto-neon: 14 100% 64%;
+    --crypto-glow: 14 100% 64%;
   }
 }
 
