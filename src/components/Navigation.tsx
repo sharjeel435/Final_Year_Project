@@ -1,20 +1,12 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, LogOut } from "lucide-react";
+import { Menu } from "lucide-react";
 import { useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
 
 const Navigation = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const { isAuthenticated, logout } = useAuth();
-
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
 
   const navItems = [
     { path: "/", label: "Home" },
@@ -31,8 +23,10 @@ const Navigation = () => {
       <div className="container mx-auto px-4 sm:px-6">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="text-xl sm:text-2xl font-bold text-primary">
-            CryptoQuest
+          <Link to="/" className="text-xl sm:text-2xl font-bold">
+            <span className="bg-gradient-to-r from-crypto-electric to-crypto-neon bg-clip-text text-transparent">
+              CryptoQuest
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -41,32 +35,13 @@ const Navigation = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
-                  isActive(item.path) ? "text-primary" : "text-foreground"
+                className={`text-sm font-medium transition-colors hover:text-crypto-electric ${
+                  isActive(item.path) ? "text-crypto-electric" : "text-foreground"
                 }`}
               >
                 {item.label}
               </Link>
             ))}
-            {isAuthenticated ? (
-              <Button
-                onClick={handleLogout}
-                variant="outline"
-                className="gap-2"
-                size="sm"
-              >
-                <LogOut className="h-4 w-4" />
-                Logout
-              </Button>
-            ) : (
-              <Button
-                asChild
-                className="bg-primary text-primary-foreground hover:bg-primary/90"
-                size="sm"
-              >
-                <Link to="/login">Get Started</Link>
-              </Button>
-            )}
           </div>
 
           {/* Mobile Navigation */}
@@ -83,33 +58,13 @@ const Navigation = () => {
                     key={item.path}
                     to={item.path}
                     onClick={() => setOpen(false)}
-                    className={`text-lg font-medium transition-colors hover:text-primary ${
-                      isActive(item.path) ? "text-primary" : "text-foreground"
+                    className={`text-lg font-medium transition-colors hover:text-crypto-electric ${
+                      isActive(item.path) ? "text-crypto-electric" : "text-foreground"
                     }`}
                   >
                     {item.label}
                   </Link>
                 ))}
-                {isAuthenticated ? (
-                  <Button
-                    onClick={() => {
-                      handleLogout();
-                      setOpen(false);
-                    }}
-                    variant="outline"
-                    className="gap-2"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    Logout
-                  </Button>
-                ) : (
-                  <Button
-                    asChild
-                    className="bg-primary text-primary-foreground hover:bg-primary/90"
-                  >
-                    <Link to="/login" onClick={() => setOpen(false)}>Get Started</Link>
-                  </Button>
-                )}
               </div>
             </SheetContent>
           </Sheet>
