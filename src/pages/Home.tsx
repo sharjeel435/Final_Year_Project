@@ -11,40 +11,50 @@ const Home = () => {
       {/* Hero Section */}
       <section className="relative overflow-hidden border-b border-border">
         <div className="absolute inset-0 bg-gradient-to-br from-crypto-electric/10 via-background to-crypto-neon/10" />
-        <div className="container relative mx-auto px-4 py-24 md:py-32">
+        <div className="container relative mx-auto px-4 py-16 sm:py-24 md:py-32 lg:py-40">
           <div className="mx-auto max-w-4xl text-center">
-            <h1 className="mb-6 text-5xl font-bold tracking-tight md:text-7xl">
+            <h1 className="mb-4 sm:mb-6 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
               <span className="bg-gradient-to-r from-crypto-electric to-crypto-neon bg-clip-text text-transparent">
                 CryptoQuest
               </span>
             </h1>
-            <p className="mb-4 text-xl text-muted-foreground md:text-2xl">
+            <p className="mb-3 sm:mb-4 text-lg sm:text-xl md:text-2xl text-muted-foreground px-4">
               AI-Powered Personalized System for Crypto Traders
             </p>
-            <p className="mb-8 text-lg text-muted-foreground">
+            <p className="mb-6 sm:mb-8 text-base sm:text-lg text-muted-foreground px-4 max-w-2xl mx-auto">
               Get AI-driven insights, personalized recommendations, and actionable strategies tailored to your trading profile.
             </p>
-            <Button
-              size="lg"
-              onClick={() => navigate("/assessment")}
-              className="group gap-2 bg-crypto-electric text-crypto-navy hover:bg-crypto-electric/90"
-            >
-              Start Assessment
-              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4">
+              <Button
+                size="lg"
+                onClick={() => navigate("/login")}
+                className="w-full sm:w-auto group gap-2 bg-crypto-electric text-crypto-navy hover:bg-crypto-electric/90 font-semibold"
+              >
+                Start Assessment
+                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={() => navigate("/about")}
+                className="w-full sm:w-auto border-crypto-electric/50 hover:bg-crypto-electric/10"
+              >
+                Learn More
+              </Button>
+            </div>
           </div>
         </div>
       </section>
 
       {/* How It Works Section */}
-      <section className="container mx-auto px-4 py-20">
-        <div className="mx-auto max-w-4xl text-center mb-16">
-          <h2 className="mb-4 text-3xl font-bold md:text-4xl">How It Works</h2>
-          <p className="text-lg text-muted-foreground">
+      <section className="container mx-auto px-4 py-12 sm:py-16 md:py-20">
+        <div className="mx-auto max-w-4xl text-center mb-10 sm:mb-12 md:mb-16">
+          <h2 className="mb-3 sm:mb-4 text-2xl sm:text-3xl md:text-4xl font-bold">How It Works</h2>
+          <p className="text-base sm:text-lg text-muted-foreground px-4">
             A simple 4-step process to unlock personalized trading insights
           </p>
         </div>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-4">
           <Card className="border-2 border-border bg-card p-6 transition-all hover:border-crypto-electric/50 hover:shadow-lg hover:shadow-crypto-electric/10">
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-crypto-electric/10">
               <span className="text-2xl font-bold text-crypto-electric">1</span>
@@ -170,16 +180,18 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="border-t border-border bg-gradient-to-br from-crypto-electric/10 via-background to-crypto-neon/10 py-20">
+      <section className="border-t border-border bg-gradient-to-br from-crypto-electric/10 via-background to-crypto-neon/10 py-12 sm:py-16 md:py-20">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="mb-4 text-3xl font-bold md:text-4xl">Ready to Transform Your Trading?</h2>
-          <p className="mb-8 text-lg text-muted-foreground">
+          <h2 className="mb-3 sm:mb-4 text-2xl sm:text-3xl md:text-4xl font-bold px-4">
+            Ready to Transform Your Trading?
+          </h2>
+          <p className="mb-6 sm:mb-8 text-base sm:text-lg text-muted-foreground px-4 max-w-2xl mx-auto">
             Start your personalized assessment now and unlock AI-powered insights
           </p>
           <Button
             size="lg"
-            onClick={() => navigate("/assessment")}
-            className="group gap-2 bg-crypto-electric text-crypto-navy hover:bg-crypto-electric/90"
+            onClick={() => navigate("/login")}
+            className="group gap-2 bg-crypto-electric text-crypto-navy hover:bg-crypto-electric/90 font-semibold"
           >
             Begin Assessment
             <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />

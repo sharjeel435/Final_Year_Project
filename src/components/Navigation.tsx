@@ -10,6 +10,7 @@ const Navigation = () => {
 
   const navItems = [
     { path: "/", label: "Home" },
+    { path: "/login", label: "Login" },
     { path: "/assessment", label: "Assessment" },
     { path: "/about", label: "About" },
     { path: "/contact", label: "Contact" },
@@ -19,17 +20,17 @@ const Navigation = () => {
 
   return (
     <nav className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 sm:px-6">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="text-2xl font-bold">
+          <Link to="/" className="text-xl sm:text-2xl font-bold">
             <span className="bg-gradient-to-r from-crypto-electric to-crypto-neon bg-clip-text text-transparent">
               CryptoQuest
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden items-center gap-6 md:flex">
+          <div className="hidden items-center gap-4 lg:gap-6 md:flex">
             {navItems.map((item) => (
               <Link
                 key={item.path}
