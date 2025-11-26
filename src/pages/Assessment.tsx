@@ -105,39 +105,40 @@ const Assessment = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background py-12">
+    <div className="min-h-screen bg-gradient-to-br from-crypto-electric/5 via-background to-crypto-neon/5 py-8 sm:py-12">
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-3xl">
-          <div className="mb-8 text-center">
-            <h1 className="mb-4 text-4xl font-bold">
+          <div className="mb-6 sm:mb-8 text-center">
+            <h1 className="mb-3 sm:mb-4 text-3xl sm:text-4xl lg:text-5xl font-bold">
               <span className="bg-gradient-to-r from-crypto-electric to-crypto-neon bg-clip-text text-transparent">
                 Trading Assessment
               </span>
             </h1>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-base sm:text-lg text-muted-foreground px-4">
               Help us understand your trading profile to provide personalized insights
             </p>
           </div>
 
-          <Card className="border-2 border-border bg-card p-8">
-            <form onSubmit={handleSubmit} className="space-y-6">
+          <Card className="border-2 border-border bg-card shadow-lg shadow-crypto-electric/5 p-4 sm:p-6 md:p-8">
+            <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
               {/* Personal Information */}
               <div className="space-y-4">
-                <h2 className="text-xl font-semibold text-crypto-electric">Personal Information</h2>
+                <h2 className="text-lg sm:text-xl font-semibold text-crypto-electric mb-4">Personal Information</h2>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="first_name">First Name *</Label>
+                  <Label htmlFor="first_name" className="text-sm sm:text-base font-medium">First Name *</Label>
                   <Input
                     id="first_name"
                     value={formData.first_name}
                     onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
                     placeholder="Enter your first name"
                     required
+                    className="h-10 sm:h-11"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email *</Label>
+                  <Label htmlFor="email" className="text-sm sm:text-base font-medium">Email *</Label>
                   <Input
                     id="email"
                     type="email"
@@ -145,13 +146,14 @@ const Assessment = () => {
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="your.email@example.com"
                     required
+                    className="h-10 sm:h-11"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="exp">Experience Level *</Label>
+                  <Label htmlFor="exp" className="text-sm sm:text-base font-medium">Experience Level *</Label>
                   <Select value={formData.exp} onValueChange={(value) => setFormData({ ...formData, exp: value })}>
-                    <SelectTrigger>
+                    <SelectTrigger className="h-10 sm:h-11">
                       <SelectValue placeholder="Select your experience level" />
                     </SelectTrigger>
                     <SelectContent>
@@ -165,19 +167,19 @@ const Assessment = () => {
 
               {/* Trading Preferences */}
               <div className="space-y-4">
-                <h2 className="text-xl font-semibold text-crypto-electric">Trading Preferences</h2>
+                <h2 className="text-lg sm:text-xl font-semibold text-crypto-electric mb-4">Trading Preferences</h2>
                 
-                <div className="space-y-2">
-                  <Label>Preferred Coins *</Label>
-                  <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+                <div className="space-y-3">
+                  <Label className="text-sm sm:text-base font-medium">Preferred Coins *</Label>
+                  <div className="grid grid-cols-1 xs:grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3">
                     {COINS.map((coin) => (
-                      <div key={coin} className="flex items-center space-x-2">
+                      <div key={coin} className="flex items-center space-x-2 p-2 rounded-lg hover:bg-crypto-electric/5 transition-colors">
                         <Checkbox
                           id={coin}
                           checked={formData.preferred_coins.includes(coin)}
                           onCheckedChange={() => handleCoinToggle(coin)}
                         />
-                        <Label htmlFor={coin} className="cursor-pointer text-sm">
+                        <Label htmlFor={coin} className="cursor-pointer text-sm flex-1">
                           {coin}
                         </Label>
                       </div>
@@ -188,11 +190,11 @@ const Assessment = () => {
 
               {/* Trading Statistics */}
               <div className="space-y-4">
-                <h2 className="text-xl font-semibold text-crypto-electric">Trading Statistics</h2>
+                <h2 className="text-lg sm:text-xl font-semibold text-crypto-electric mb-4">Trading Statistics</h2>
                 
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="no_of_trade">Total Number of Trades</Label>
+                    <Label htmlFor="no_of_trade" className="text-sm sm:text-base font-medium">Total Number of Trades</Label>
                     <Input
                       id="no_of_trade"
                       type="number"
@@ -200,11 +202,12 @@ const Assessment = () => {
                       value={formData.no_of_trade}
                       onChange={(e) => setFormData({ ...formData, no_of_trade: e.target.value })}
                       placeholder="0"
+                      className="h-10 sm:h-11"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="success_trades">Successful Trades</Label>
+                    <Label htmlFor="success_trades" className="text-sm sm:text-base font-medium">Successful Trades</Label>
                     <Input
                       id="success_trades"
                       type="number"
@@ -212,11 +215,12 @@ const Assessment = () => {
                       value={formData.success_trades}
                       onChange={(e) => setFormData({ ...formData, success_trades: e.target.value })}
                       placeholder="0"
+                      className="h-10 sm:h-11"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="failed_trades">Failed Trades</Label>
+                    <Label htmlFor="failed_trades" className="text-sm sm:text-base font-medium">Failed Trades</Label>
                     <Input
                       id="failed_trades"
                       type="number"
@@ -224,11 +228,12 @@ const Assessment = () => {
                       value={formData.failed_trades}
                       onChange={(e) => setFormData({ ...formData, failed_trades: e.target.value })}
                       placeholder="0"
+                      className="h-10 sm:h-11"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="profit">Total Profit ($)</Label>
+                    <Label htmlFor="profit" className="text-sm sm:text-base font-medium">Total Profit ($)</Label>
                     <Input
                       id="profit"
                       type="number"
@@ -237,11 +242,12 @@ const Assessment = () => {
                       value={formData.profit}
                       onChange={(e) => setFormData({ ...formData, profit: e.target.value })}
                       placeholder="0.00"
+                      className="h-10 sm:h-11"
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="loss">Total Loss ($)</Label>
+                  <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="loss" className="text-sm sm:text-base font-medium">Total Loss ($)</Label>
                     <Input
                       id="loss"
                       type="number"
@@ -250,6 +256,7 @@ const Assessment = () => {
                       value={formData.loss}
                       onChange={(e) => setFormData({ ...formData, loss: e.target.value })}
                       placeholder="0.00"
+                      className="h-10 sm:h-11"
                     />
                   </div>
                 </div>
@@ -258,7 +265,7 @@ const Assessment = () => {
               <Button
                 type="submit"
                 size="lg"
-                className="w-full bg-crypto-electric text-crypto-navy hover:bg-crypto-electric/90"
+                className="w-full h-11 sm:h-12 bg-crypto-electric text-crypto-navy hover:bg-crypto-electric/90 font-semibold text-base mt-2"
                 disabled={loading}
               >
                 {loading ? (
