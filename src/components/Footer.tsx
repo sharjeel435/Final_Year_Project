@@ -5,7 +5,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border bg-card/50 backdrop-blur-sm">
+    <footer className="border-t border-border bg-card/80 backdrop-blur-sm">
       <div className="container mx-auto px-4 py-8 sm:py-12">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand Section */}
@@ -13,7 +13,7 @@ const Footer = () => {
             <Link to="/" className="inline-block">
               <h3 className="text-xl sm:text-2xl font-bold">
                 <span className="bg-gradient-to-r from-crypto-electric to-crypto-neon bg-clip-text text-transparent">
-                  CryptoQuest
+                  Personlized Crypto
                 </span>
               </h3>
             </Link>
@@ -148,7 +148,7 @@ const Footer = () => {
         <div className="mt-8 border-t border-border pt-6">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <p className="text-sm text-muted-foreground text-center sm:text-left">
-              © {currentYear} CryptoQuest. All rights reserved.
+              © {currentYear} Personlized Crypto. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm">
               <a

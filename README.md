@@ -1,73 +1,83 @@
-# Welcome to your Lovable project
+# CryptoQuest
 
-## Project info
+AI-Powered Personalized System for Crypto Traders. Users complete an assessment, take a 10‑question quiz, and receive personalized insights with charts.
 
-**URL**: https://lovable.dev/projects/c616abc6-8095-4c2a-8934-4c7b19744340
+## Tech Stack
 
-## How can I edit this code?
+- Vite 5 (dev server on `http://localhost:8080/`)
+- React 18 + TypeScript
+- Tailwind CSS + shadcn/ui + Radix
+- TanStack Query
+- Recharts
 
-There are several ways of editing your application.
+## Requirements
 
-**Use Lovable**
+- Node.js 18+ and npm
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/c616abc6-8095-4c2a-8934-4c7b19744340) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+## Setup
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+npm install
+npm run dev
+# open http://localhost:8080/
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Environment Variables
 
-# Step 3: Install the necessary dependencies.
-npm i
+Client-side Supabase configuration (do not use service role on the frontend):
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+- `VITE_SUPABASE_URL` = `https://<project-ref>.supabase.co`
+- `VITE_SUPABASE_ANON_KEY` = `<your-anon-key>`
+
+Place them in your shell session (PowerShell):
+
+```powershell
+$env:VITE_SUPABASE_URL="https://<your-ref>.supabase.co"
+$env:VITE_SUPABASE_ANON_KEY="<anon-key>"
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Background Images
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+To enable the crypto-themed wallpaper, add image assets:
 
-**Use GitHub Codespaces**
+- `public/backgrounds/crypto-1.jpg`
+- `public/backgrounds/crypto-2.jpg`
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+The site-wide background layering is defined in `src/index.css`.
 
-## What technologies are used for this project?
+## Workflow
 
-This project is built with:
+1. Assessment (`/assessment`):
+   - Collects user profile and trading stats.
+   - Posts all stored parameters to webhook `https://cryptoagent.app.n8n.cloud/webhook-test/quiz-form`.
+   - Saves `cryptoquest_user` and initializes quiz state in local storage.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+2. Quiz (`/quiz`):
+   - Auto-generates 10 questions covering trading concepts.
+   - Randomizes question and option order.
+   - Provides accessible answer selection and progress.
+   - On submit, computes score against correct answers.
+   - Adds a 25s anticipation delay before navigating to results.
 
-## How can I deploy this project?
+3. Results (`/results`):
+   - Derives performance metrics from assessment and quiz.
+   - Displays composite score and charts (win/fail/efficiency/quiz).
 
-Simply open [Lovable](https://lovable.dev/projects/c616abc6-8095-4c2a-8934-4c7b19744340) and click on Share -> Publish.
+## Scripts
 
-## Can I connect a custom domain to my Lovable project?
+- `npm run dev` — start dev server
+- `npm run build` — production build
+- `npm run preview` — preview built assets
+- `npm run lint` — run ESLint
 
-Yes, you can!
+## Troubleshooting
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- Webhook test mode: if you see “webhook not registered,” initialize the workflow once and retry.
+- Port conflicts: change `server.port` in `vite.config.ts`.
+- Missing env vars: ensure `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are set before running.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## Security Notes
+
+- Never embed Supabase service role keys in frontend code.
+- Store only non-sensitive values client-side; send sensitive data via a secure backend.

@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { Download, Mail, RefreshCw, FileText, TrendingUp, TrendingDown, Target, Zap } from "lucide-react";
+import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/components/ui/chart";
+import { BarChart, Bar, CartesianGrid, XAxis, YAxis } from "recharts";
 
 interface DerivedMetrics {
   win_rate: number;
@@ -22,9 +24,18 @@ interface DerivedMetrics {
 const Results = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [userData, setUserData] = useState<any>(null);
-  const [quizResults, setQuizResults] = useState<any>(null);
+  const printRef = useRef<HTMLDivElement | null>(null);
+  interface UserData { email?: string; no_of_trade?: number; success_trades?: number; failed_trades?: number; profit?: number; loss?: number; exp?: string }
+  interface QuizLocal { quiz_score: number }
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [quizResults, setQuizResults] = useState<QuizLocal | null>(null);
   const [metrics, setMetrics] = useState<DerivedMetrics | null>(null);
+  const [aiEvaluation, setAiEvaluation] = useState<string>("");
+  const [aiRecommendations, setAiRecommendations] = useState<string[]>([]);
+  const [aiResources, setAiResources] = useState<string[]>([]);
+  const [aiExercise, setAiExercise] = useState<string>("");
+  const [aiLoading, setAiLoading] = useState<boolean>(false);
+  const [aiError, setAiError] = useState<string | null>(null);
 
   useEffect(() => {
     // Load data from localStorage
@@ -76,18 +87,156 @@ const Results = () => {
     setMetrics(calculatedMetrics);
   }, [navigate, toast]);
 
+  useEffect(() => {
+    if (!metrics || !quizResults) return;
+    const cached = localStorage.getItem("cryptoquest_ai_report");
+    if (cached) {
+      try {
+        const c = JSON.parse(cached) as { evaluation?: string; recommendations?: string[]; resources?: string[]; exercise?: string };
+        setAiEvaluation(c.evaluation || "");
+        setAiRecommendations(c.recommendations || []);
+        setAiResources(c.resources || []);
+        setAiExercise(c.exercise || "");
+        return;
+      } catch { void 0; }
+    }
+    const endpoint = (import.meta.env.VITE_AI_RECOMMENDATIONS_ENDPOINT as string | undefined) || "";
+    const stream = (import.meta.env.VITE_AI_RECOMMENDATIONS_STREAM as string | undefined) || "";
+    const payload = {
+      quiz_id: ((): string | undefined => {
+        try {
+          const q = localStorage.getItem("cryptoquest_quiz");
+          if (q) return (JSON.parse(q) as { quiz_id?: string }).quiz_id;
+        } catch { void 0; }
+        try {
+          const r = localStorage.getItem("cryptoquest_quiz_results");
+          if (r) return (JSON.parse(r) as { quiz_id?: string }).quiz_id;
+        } catch { void 0; }
+        return undefined;
+      })(),
+      user: userData,
+      metrics,
+      quiz: quizResults,
+    };
+    setAiLoading(true);
+    setAiError(null);
+    const setDefault = () => {
+      const levelText = userData?.exp || "Beginner";
+      const evalText = `Based on your ${levelText.toLowerCase()} level and current metrics, you show ${(metrics.composite_performance_score >= 60 ? "strong" : "developing")} potential in crypto trading.`;
+      const recs = [
+        "Focus on improving your win rate by refining entry and exit strategies",
+        "Implement strict risk management to reduce loss ratio",
+        "Continue learning through educational resources to enhance trading psychology",
+      ];
+      const res = [
+        "CoinMarketCap Academy - Comprehensive crypto trading courses",
+        "TradingView - Advanced charting and technical analysis tools",
+      ];
+      const ex = "This week, track your emotional state before, during, and after each trade. Identify patterns between emotions and trade outcomes.";
+      setAiEvaluation(evalText);
+      setAiRecommendations(recs);
+      setAiResources(res);
+      setAiExercise(ex);
+      localStorage.setItem("cryptoquest_ai_report", JSON.stringify({ evaluation: evalText, recommendations: recs, resources: res, exercise: ex }));
+      setAiLoading(false);
+    };
+    const consumeStream = () => {
+      if (!stream || !("EventSource" in window)) return false;
+      try {
+        const params = new URLSearchParams();
+        if (payload.quiz_id) params.set("quiz_id", payload.quiz_id);
+        const es = new EventSource(`${stream}?${params.toString()}`);
+        es.onmessage = (ev) => {
+          try {
+            const data = JSON.parse(ev.data) as { evaluation?: string; recommendations?: string[]; resources?: string[]; exercise?: string; done?: boolean };
+            if (data.evaluation) setAiEvaluation(data.evaluation);
+            if (Array.isArray(data.recommendations)) setAiRecommendations(data.recommendations);
+            if (Array.isArray(data.resources)) setAiResources(data.resources);
+            if (typeof data.exercise === "string") setAiExercise(data.exercise);
+            if (data.done) {
+              localStorage.setItem("cryptoquest_ai_report", JSON.stringify({ evaluation: data.evaluation, recommendations: data.recommendations, resources: data.resources, exercise: data.exercise }));
+              es.close();
+              setAiLoading(false);
+            }
+          } catch { void 0; }
+        };
+        es.onerror = () => {
+          setAiError("Connection lost. Using defaults.");
+          es.close();
+          setDefault();
+        };
+        return true;
+      } catch {
+        return false;
+      }
+    };
+    const postFetch = async () => {
+      if (!endpoint) return false;
+      try {
+        const r = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+        if (!r.ok) throw new Error("Failed");
+        const d = (await r.json()) as { evaluation?: string; recommendations?: string[]; resources?: string[]; exercise?: string };
+        setAiEvaluation(d.evaluation || "");
+        setAiRecommendations(Array.isArray(d.recommendations) ? d.recommendations : []);
+        setAiResources(Array.isArray(d.resources) ? d.resources : []);
+        setAiExercise(typeof d.exercise === "string" ? d.exercise : "");
+        localStorage.setItem("cryptoquest_ai_report", JSON.stringify({ evaluation: d.evaluation, recommendations: d.recommendations, resources: d.resources, exercise: d.exercise }));
+        setAiLoading(false);
+        return true;
+      } catch {
+        return false;
+      }
+    };
+    (async () => {
+      const streamed = consumeStream();
+      if (streamed) return;
+      const fetched = await postFetch();
+      if (fetched) return;
+      setDefault();
+    })();
+  }, [metrics, quizResults]);
+
+  useEffect(() => {
+    const styleHref = "https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css";
+    if (!document.querySelector('link[data-n8n-chat-style="true"]')) {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = styleHref;
+      link.setAttribute("data-n8n-chat-style", "true");
+      document.head.appendChild(link);
+    }
+    const webhookUrl = "https://cryptoagent.app.n8n.cloud/webhook/29c46a45-5ca0-4558-8cc1-bf32301144d6/chat";
+    if (!document.getElementById("n8n-chat-inline")) {
+      const script = document.createElement("script");
+      script.type = "module";
+      script.id = "n8n-chat-inline";
+      script.textContent = "import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js'; createChat({ webhookUrl: '" + webhookUrl + "' });";
+      document.body.appendChild(script);
+    }
+  }, []);
+
   const handleDownloadPDF = () => {
-    toast({
-      title: "PDF Download",
-      description: "Your report will be downloaded shortly.",
-    });
+    try {
+      window.print();
+    } catch (e) {
+      toast({ title: "Unable to print", description: "Please use browser Print to save as PDF", variant: "destructive" });
+    }
   };
 
   const handleEmailReport = () => {
-    toast({
-      title: "Email Sent",
-      description: "Your report has been sent to your email address.",
-    });
+    const email = userData?.email || "";
+    const summary = [
+      `Level: ${level}`,
+      `Win Rate: ${metrics.win_rate.toFixed(1)}%`,
+      `Failure Rate: ${metrics.failure_rate.toFixed(1)}%`,
+      `Trade Efficiency: ${metrics.trade_efficiency.toFixed(1)}%`,
+      `Quiz Score: ${metrics.quiz_score_normalized.toFixed(0)}%`,
+      `Composite Score: ${metrics.composite_performance_score.toFixed(1)}%`,
+    ].join("\n");
+    const subject = "CryptoQuest Trading Report";
+    const body = `Your personalized trading report:\n\n${summary}\n\nGenerated: ${new Date().toLocaleString()}`;
+    const url = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = url;
   };
 
   const handleRetakeQuiz = () => {
@@ -96,10 +245,15 @@ const Results = () => {
   };
 
   const handleDeeperAnalysis = () => {
-    toast({
-      title: "Request Submitted",
-      description: "We'll send you a deeper analysis within 24 hours.",
-    });
+    try {
+      const url = "https://cryptoagent.app.n8n.cloud/webhook/d8017fec-1fd7-40fa-aad2-7802c65b51d5/chat";
+      const w = window.open(url, "_blank", "noopener,noreferrer");
+      if (!w) {
+        window.location.href = url;
+      }
+    } catch {
+      toast({ title: "Unable to open", description: "Please try again.", variant: "destructive" });
+    }
   };
 
   if (!metrics || !userData) {
@@ -116,7 +270,7 @@ const Results = () => {
   const successProbability = metrics.composite_performance_score / 100;
 
   return (
-    <div className="min-h-screen bg-background py-12">
+    <div className="min-h-screen bg-background py-12" ref={printRef}>
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-6xl">
           {/* Header */}
@@ -207,6 +361,31 @@ const Results = () => {
             />
           </div>
 
+          <Card className="mb-8 border-2 border-border bg-card p-6">
+            <h3 className="mb-4 text-xl font-semibold">Performance Overview</h3>
+            <ChartContainer
+              className="w-full"
+              config={{
+                win: { label: "Win", color: "hsl(var(--crypto-electric))" },
+                fail: { label: "Fail", color: "hsl(var(--destructive))" },
+                eff: { label: "Efficiency", color: "hsl(var(--accent))" },
+                quiz: { label: "Quiz", color: "hsl(var(--primary))" },
+              }}
+            >
+              <BarChart data={[{ name: "Scores", win: metrics.win_rate, fail: metrics.failure_rate, eff: metrics.trade_efficiency, quiz: metrics.quiz_score_normalized }]}> 
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis domain={[0, 100]} />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <ChartLegend content={<ChartLegendContent />} />
+                <Bar dataKey="win" fill="var(--color-win)" radius={[4,4,0,0]} />
+                <Bar dataKey="fail" fill="var(--color-fail)" radius={[4,4,0,0]} />
+                <Bar dataKey="eff" fill="var(--color-eff)" radius={[4,4,0,0]} />
+                <Bar dataKey="quiz" fill="var(--color-quiz)" radius={[4,4,0,0]} />
+              </BarChart>
+            </ChartContainer>
+          </Card>
+
           {/* Composite Performance Score */}
           <Card className="mb-8 border-2 border-border bg-card p-6">
             <h3 className="mb-4 text-xl font-semibold">Composite Performance Score</h3>
@@ -221,38 +400,40 @@ const Results = () => {
           {/* AI Recommendations */}
           <Card className="mb-8 border-2 border-crypto-electric/50 bg-card p-6">
             <h3 className="mb-4 text-xl font-semibold text-crypto-electric">AI-Powered Recommendations</h3>
-            
             <div className="space-y-4">
               <div>
                 <h4 className="mb-2 font-semibold">Evaluation</h4>
                 <p className="text-muted-foreground">
-                  Based on your {level.toLowerCase()} level and current metrics, you show {successProbability > 0.6 ? "strong" : "developing"} potential in crypto trading.
+                  {aiLoading && <span className="text-crypto-electric">Generating...</span>}
+                  {!aiLoading && aiEvaluation ? aiEvaluation : `Based on your ${level.toLowerCase()} level and current metrics, you show ${(successProbability > 0.6 ? "strong" : "developing")} potential in crypto trading.`}
                 </p>
               </div>
-
               <div>
                 <h4 className="mb-2 font-semibold">Recommendations</h4>
                 <ul className="list-inside list-disc space-y-2 text-muted-foreground">
-                  <li>Focus on improving your win rate by refining entry and exit strategies</li>
-                  <li>Implement strict risk management to reduce loss ratio</li>
-                  <li>Continue learning through educational resources to enhance trading psychology</li>
+                  {(aiRecommendations.length ? aiRecommendations : [
+                    "Focus on improving your win rate by refining entry and exit strategies",
+                    "Implement strict risk management to reduce loss ratio",
+                    "Continue learning through educational resources to enhance trading psychology",
+                  ]).map((r) => (<li key={r}>{r}</li>))}
                 </ul>
               </div>
-
               <div>
                 <h4 className="mb-2 font-semibold">Resources</h4>
                 <ul className="list-inside list-disc space-y-2 text-muted-foreground">
-                  <li>CoinMarketCap Academy - Comprehensive crypto trading courses</li>
-                  <li>TradingView - Advanced charting and technical analysis tools</li>
+                  {(aiResources.length ? aiResources : [
+                    "CoinMarketCap Academy - Comprehensive crypto trading courses",
+                    "TradingView - Advanced charting and technical analysis tools",
+                  ]).map((r) => (<li key={r}>{r}</li>))}
                 </ul>
               </div>
-
               <div>
                 <h4 className="mb-2 font-semibold">Micro-Exercise</h4>
                 <p className="text-muted-foreground">
-                  This week, track your emotional state before, during, and after each trade. Identify patterns between emotions and trade outcomes.
+                  {aiExercise || "This week, track your emotional state before, during, and after each trade. Identify patterns between emotions and trade outcomes."}
                 </p>
               </div>
+              {aiError && <div className="text-xs text-muted-foreground">{aiError}</div>}
             </div>
           </Card>
 
@@ -286,7 +467,7 @@ const Results = () => {
               className="gap-2"
             >
               <FileText className="h-4 w-4" />
-              Deeper Analysis
+              Ask AI Agent
             </Button>
           </div>
         </div>

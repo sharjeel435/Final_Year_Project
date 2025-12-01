@@ -9,7 +9,7 @@ const About = () => {
           <div className="mb-12 text-center">
             <h1 className="mb-4 text-4xl font-bold md:text-5xl">
               <span className="bg-gradient-to-r from-crypto-electric to-crypto-neon bg-clip-text text-transparent">
-                About CryptoQuest
+                Personlized Crypto
               </span>
             </h1>
             <p className="text-lg text-muted-foreground">
@@ -21,7 +21,7 @@ const About = () => {
           <Card className="mb-8 border-2 border-border bg-card p-8">
             <h2 className="mb-4 text-2xl font-semibold text-crypto-electric">Our Mission</h2>
             <p className="mb-4 text-muted-foreground">
-              CryptoQuest is an AI-powered personalized system designed to help crypto traders of all levels
+              Personlized Crypto is an AI-powered personalized system designed to help crypto traders of all levels
               understand their trading patterns, identify areas for improvement, and receive actionable
               recommendations tailored to their unique profile.
             </p>
@@ -33,7 +33,7 @@ const About = () => {
 
           {/* How It Works */}
           <Card className="mb-8 border-2 border-border bg-card p-8">
-            <h2 className="mb-6 text-2xl font-semibold text-crypto-electric">How CryptoQuest Works</h2>
+            <h2 className="mb-6 text-2xl font-semibold text-crypto-electric">How Personlized Crypto Works</h2>
             
             <div className="space-y-6">
               <div className="flex gap-4">

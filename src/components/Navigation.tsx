@@ -22,10 +22,9 @@ const Navigation = () => {
     <nav className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
           <Link to="/" className="text-xl sm:text-2xl font-bold">
             <span className="bg-gradient-to-r from-crypto-electric to-crypto-neon bg-clip-text text-transparent">
-              CryptoQuest
+              Personlized Crypto
             </span>
           </Link>
 
