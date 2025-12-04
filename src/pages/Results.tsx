@@ -45,10 +45,42 @@ const Results = () => {
     if (!user || !results) {
       toast({
         title: "No Results Found",
-        description: "Please complete the assessment and quiz first.",
+        description: "Loading with default data. Complete assessment and quiz for personalized results.",
         variant: "destructive",
       });
-      navigate("/assessment");
+      const userFallback = {
+        email: "",
+        no_of_trade: 0,
+        success_trades: 0,
+        failed_trades: 0,
+        profit: 0,
+        loss: 0,
+        exp: "Beginner",
+      };
+      const resultsFallback = { quiz_score: 0 };
+      setUserData(userFallback);
+      setQuizResults(resultsFallback);
+      // Proceed to compute metrics using fallbacks
+      const totalTrades = userFallback.no_of_trade || 1;
+      const successTrades = userFallback.success_trades || 0;
+      const failedTrades = userFallback.failed_trades || 0;
+      const profit = userFallback.profit || 0;
+      const loss = userFallback.loss || 0;
+      const calculatedMetrics: DerivedMetrics = {
+        win_rate: totalTrades > 0 ? (successTrades / totalTrades) * 100 : 0,
+        failure_rate: totalTrades > 0 ? (failedTrades / totalTrades) * 100 : 0,
+        profit_ratio: (profit + loss) > 0 ? (profit / (profit + loss)) * 100 : 0,
+        loss_ratio: (profit + loss) > 0 ? (loss / (profit + loss)) * 100 : 0,
+        net_performance: profit - loss,
+        trade_efficiency: totalTrades > 0 ? ((successTrades - failedTrades) / totalTrades) * 100 : 0,
+        avg_profit_per_trade: totalTrades > 0 ? profit / totalTrades : 0,
+        profit_loss_ratio: loss > 0 ? profit / loss : profit > 0 ? 999 : 0,
+        quiz_score_normalized: 0,
+        composite_performance_score: 0,
+      };
+      calculatedMetrics.composite_performance_score = 
+        (calculatedMetrics.win_rate + calculatedMetrics.trade_efficiency + calculatedMetrics.quiz_score_normalized) / 3;
+      setMetrics(calculatedMetrics);
       return;
     }
 
@@ -196,24 +228,7 @@ const Results = () => {
     })();
   }, [metrics, quizResults]);
 
-  useEffect(() => {
-    const styleHref = "https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css";
-    if (!document.querySelector('link[data-n8n-chat-style="true"]')) {
-      const link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = styleHref;
-      link.setAttribute("data-n8n-chat-style", "true");
-      document.head.appendChild(link);
-    }
-    const webhookUrl = "https://cryptoagent.app.n8n.cloud/webhook/29c46a45-5ca0-4558-8cc1-bf32301144d6/chat";
-    if (!document.getElementById("n8n-chat-inline")) {
-      const script = document.createElement("script");
-      script.type = "module";
-      script.id = "n8n-chat-inline";
-      script.textContent = "import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js'; createChat({ webhookUrl: '" + webhookUrl + "' });";
-      document.body.appendChild(script);
-    }
-  }, []);
+  
 
   const handleDownloadPDF = () => {
     try {
@@ -225,18 +240,85 @@ const Results = () => {
 
   const handleEmailReport = () => {
     const email = userData?.email || "";
-    const summary = [
+    const subject = "Personalized Crypto Trading Report";
+    const profile = [
       `Level: ${level}`,
+      `Total Trades: ${userData?.no_of_trade ?? 0}`,
+      `Successful Trades: ${userData?.success_trades ?? 0}`,
+      `Failed Trades: ${userData?.failed_trades ?? 0}`,
+      `Profit: $${Number(userData?.profit ?? 0).toFixed(2)}`,
+      `Loss: $${Number(userData?.loss ?? 0).toFixed(2)}`,
+    ].join("\n");
+    const metricsSection = [
       `Win Rate: ${metrics.win_rate.toFixed(1)}%`,
       `Failure Rate: ${metrics.failure_rate.toFixed(1)}%`,
       `Trade Efficiency: ${metrics.trade_efficiency.toFixed(1)}%`,
+      `Profit Ratio: ${metrics.profit_ratio.toFixed(1)}%`,
+      `Loss Ratio: ${metrics.loss_ratio.toFixed(1)}%`,
+      `Net Performance: $${metrics.net_performance.toFixed(2)}`,
+      `Avg Profit Per Trade: $${metrics.avg_profit_per_trade.toFixed(2)}`,
+      `Profit/Loss Ratio: ${metrics.profit_loss_ratio > 99 ? "∞" : metrics.profit_loss_ratio.toFixed(2)}`,
       `Quiz Score: ${metrics.quiz_score_normalized.toFixed(0)}%`,
       `Composite Score: ${metrics.composite_performance_score.toFixed(1)}%`,
     ].join("\n");
-    const subject = "CryptoQuest Trading Report";
-    const body = `Your personalized trading report:\n\n${summary}\n\nGenerated: ${new Date().toLocaleString()}`;
-    const url = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = url;
+    const evaluationText = (aiEvaluation && aiEvaluation.trim().length)
+      ? aiEvaluation
+      : `Based on your ${level.toLowerCase()} level and current metrics, you show ${(metrics.composite_performance_score >= 60 ? "strong" : "developing")} potential in crypto trading.`;
+    const recs = (aiRecommendations && aiRecommendations.length)
+      ? aiRecommendations
+      : [
+          "Focus on improving your win rate by refining entry and exit strategies",
+          "Implement strict risk management to reduce loss ratio",
+          "Continue learning through educational resources to enhance trading psychology",
+        ];
+    const resources = (aiResources && aiResources.length)
+      ? aiResources
+      : [
+          "CoinMarketCap Academy - Comprehensive crypto trading courses",
+          "TradingView - Advanced charting and technical analysis tools",
+        ];
+    const exercise = aiExercise || "This week, track your emotional state before, during, and after each trade. Identify patterns between emotions and trade outcomes.";
+    const highlights = [
+      `• Win Rate: ${metrics.win_rate.toFixed(1)}% 📈`,
+      `• Trade Efficiency: ${metrics.trade_efficiency.toFixed(1)}% ⚡`,
+      `• Composite Score: ${metrics.composite_performance_score.toFixed(1)}% ⭐`,
+    ].join("\n");
+    const body = [
+      "Hello,",
+      "",
+      "Thank you for using Personalized Crypto. Below is your professionally formatted trading report:",
+      "",
+      "Profile 🧾:",
+      profile,
+      "",
+      "Key Highlights ✨:",
+      highlights,
+      "",
+      "Derived Metrics 📊:",
+      metricsSection,
+      "",
+      "Evaluation 🧠:",
+      evaluationText,
+      "",
+      "Recommendations ✅:",
+      ...recs.map((r) => `- ${r}`),
+      "",
+      "Resources 📚:",
+      ...resources.map((r) => `- ${r}`),
+      "",
+      "Micro-Exercise 🏋️‍♂️:",
+      exercise,
+      "",
+      `Generated: ${new Date().toLocaleString()}`,
+      "",
+      "Best regards,",
+      "Personalized Crypto Team",
+    ].join("\n");
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const w = window.open(gmailUrl, "_blank", "noopener,noreferrer");
+    if (!w) {
+      window.location.href = gmailUrl;
+    }
   };
 
   const handleRetakeQuiz = () => {
@@ -244,17 +326,7 @@ const Results = () => {
     navigate("/quiz");
   };
 
-  const handleDeeperAnalysis = () => {
-    try {
-      const url = "https://cryptoagent.app.n8n.cloud/webhook/d8017fec-1fd7-40fa-aad2-7802c65b51d5/chat";
-      const w = window.open(url, "_blank", "noopener,noreferrer");
-      if (!w) {
-        window.location.href = url;
-      }
-    } catch {
-      toast({ title: "Unable to open", description: "Please try again.", variant: "destructive" });
-    }
-  };
+  const askAgentUrl = "https://fyp-crypto.app.n8n.cloud/webhook/d8017fec-1fd7-40fa-aad2-7802c65b51d5/chat";
 
   if (!metrics || !userData) {
     return (
@@ -277,7 +349,7 @@ const Results = () => {
           <div className="mb-8 text-center">
             <h1 className="mb-4 text-4xl font-bold">
               <span className="bg-gradient-to-r from-crypto-electric to-crypto-neon bg-clip-text text-transparent">
-                Your Trading Analysis
+                Your Trading Analysis 📊
               </span>
             </h1>
             <p className="text-lg text-muted-foreground">
@@ -362,7 +434,7 @@ const Results = () => {
           </div>
 
           <Card className="mb-8 border-2 border-border bg-card p-6">
-            <h3 className="mb-4 text-xl font-semibold">Performance Overview</h3>
+            <h3 className="mb-4 text-xl font-semibold text-crypto-electric">Performance Overview 📈</h3>
             <ChartContainer
               className="w-full"
               config={{
@@ -388,7 +460,7 @@ const Results = () => {
 
           {/* Composite Performance Score */}
           <Card className="mb-8 border-2 border-border bg-card p-6">
-            <h3 className="mb-4 text-xl font-semibold">Composite Performance Score</h3>
+            <h3 className="mb-4 text-xl font-semibold text-crypto-neon">Composite Performance Score ⭐</h3>
             <div className="flex items-center gap-4">
               <Progress value={metrics.composite_performance_score} className="h-4 flex-1" />
               <span className="text-2xl font-bold text-crypto-electric">
@@ -399,17 +471,17 @@ const Results = () => {
 
           {/* AI Recommendations */}
           <Card className="mb-8 border-2 border-crypto-electric/50 bg-card p-6">
-            <h3 className="mb-4 text-xl font-semibold text-crypto-electric">AI-Powered Recommendations</h3>
+            <h3 className="mb-4 text-xl font-semibold text-crypto-electric">AI-Powered Recommendations 🤖</h3>
             <div className="space-y-4">
               <div>
-                <h4 className="mb-2 font-semibold">Evaluation</h4>
+                <h4 className="mb-2 font-semibold text-crypto-electric">Evaluation 🧠</h4>
                 <p className="text-muted-foreground">
                   {aiLoading && <span className="text-crypto-electric">Generating...</span>}
                   {!aiLoading && aiEvaluation ? aiEvaluation : `Based on your ${level.toLowerCase()} level and current metrics, you show ${(successProbability > 0.6 ? "strong" : "developing")} potential in crypto trading.`}
                 </p>
               </div>
               <div>
-                <h4 className="mb-2 font-semibold">Recommendations</h4>
+                <h4 className="mb-2 font-semibold text-crypto-electric">Recommendations ✅</h4>
                 <ul className="list-inside list-disc space-y-2 text-muted-foreground">
                   {(aiRecommendations.length ? aiRecommendations : [
                     "Focus on improving your win rate by refining entry and exit strategies",
@@ -419,7 +491,7 @@ const Results = () => {
                 </ul>
               </div>
               <div>
-                <h4 className="mb-2 font-semibold">Resources</h4>
+                <h4 className="mb-2 font-semibold text-crypto-electric">Resources 📚</h4>
                 <ul className="list-inside list-disc space-y-2 text-muted-foreground">
                   {(aiResources.length ? aiResources : [
                     "CoinMarketCap Academy - Comprehensive crypto trading courses",
@@ -428,7 +500,7 @@ const Results = () => {
                 </ul>
               </div>
               <div>
-                <h4 className="mb-2 font-semibold">Micro-Exercise</h4>
+                <h4 className="mb-2 font-semibold text-crypto-electric">Micro-Exercise 🏋️‍♂️</h4>
                 <p className="text-muted-foreground">
                   {aiExercise || "This week, track your emotional state before, during, and after each trade. Identify patterns between emotions and trade outcomes."}
                 </p>
@@ -438,7 +510,7 @@ const Results = () => {
           </Card>
 
           {/* Action Buttons */}
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="no-print grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Button
               onClick={handleDownloadPDF}
               className="gap-2 bg-crypto-electric text-crypto-navy hover:bg-crypto-electric/90"
@@ -461,15 +533,15 @@ const Results = () => {
               <RefreshCw className="h-4 w-4" />
               Retake Quiz
             </Button>
-            <Button
-              onClick={handleDeeperAnalysis}
-              variant="outline"
-              className="gap-2"
-            >
-              <FileText className="h-4 w-4" />
-              Ask AI Agent
+            <Button asChild variant="outline" className="gap-2">
+              <a href={askAgentUrl} target="_blank" rel="noopener noreferrer">
+                <FileText className="h-4 w-4" />
+                Ask AI Agent
+              </a>
             </Button>
           </div>
+
+          
         </div>
       </div>
     </div>

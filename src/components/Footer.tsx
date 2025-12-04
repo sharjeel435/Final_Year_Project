@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Mail, Twitter, Github, Linkedin } from "lucide-react";
+import { Mail, Github } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -61,42 +61,14 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Resources */}
           <div className="space-y-4">
-            <h4 className="text-base font-semibold text-foreground">Resources</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <a
-                  href="#"
-                  className="text-muted-foreground transition-colors hover:text-crypto-electric"
-                >
-                  Documentation
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-muted-foreground transition-colors hover:text-crypto-electric"
-                >
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-muted-foreground transition-colors hover:text-crypto-electric"
-                >
-                  Terms of Service
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-muted-foreground transition-colors hover:text-crypto-electric"
-                >
-                  FAQ
-                </a>
-              </li>
+            <h4 className="text-base font-semibold text-foreground">Supervisor</h4>
+            <p className="text-sm text-muted-foreground">Alina Arshad</p>
+            <h4 className="text-base font-semibold text-foreground">Team</h4>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li>Sharjeel Safdar — 22K-4210</li>
+              <li>Ahmed Faraz — 22K-5185</li>
+              <li>Sohail Ahmed — 22I-0859</li>
             </ul>
           </div>
 
@@ -107,26 +79,12 @@ const Footer = () => {
               <a
                 href="#"
                 className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-background transition-all hover:border-crypto-electric hover:bg-crypto-electric/10"
-                aria-label="Twitter"
-              >
-                <Twitter className="h-4 w-4 text-foreground" />
-              </a>
-              <a
-                href="#"
-                className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-background transition-all hover:border-crypto-electric hover:bg-crypto-electric/10"
                 aria-label="Github"
               >
                 <Github className="h-4 w-4 text-foreground" />
               </a>
               <a
-                href="#"
-                className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-background transition-all hover:border-crypto-electric hover:bg-crypto-electric/10"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="h-4 w-4 text-foreground" />
-              </a>
-              <a
-                href="mailto:contact@cryptoquest.com"
+                href="mailto:fastsharjeel18@gmail.com"
                 className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-background transition-all hover:border-crypto-electric hover:bg-crypto-electric/10"
                 aria-label="Email"
               >
@@ -135,10 +93,10 @@ const Footer = () => {
             </div>
             <p className="text-sm text-muted-foreground">
               <a
-                href="mailto:contact@cryptoquest.com"
+                href="mailto:fastsharjeel18@gmail.com"
                 className="transition-colors hover:text-crypto-electric"
               >
-                contact@cryptoquest.com
+               fastsharjeel18@gmail.com
               </a>
             </p>
           </div>
