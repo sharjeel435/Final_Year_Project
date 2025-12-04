@@ -8,7 +8,8 @@ import { Download, Mail, RefreshCw, FileText, TrendingUp, TrendingDown, Target, 
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/components/ui/chart";
 import { BarChart, Bar, CartesianGrid, XAxis, YAxis } from "recharts";
 
-interface DerivedMetrics {
+interface DerivedMetrics 
+{
   win_rate: number;
   failure_rate: number;
   profit_ratio: number;
