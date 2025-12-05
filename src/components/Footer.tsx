@@ -68,7 +68,7 @@ const Footer = () => {
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>Sharjeel Safdar — 22K-4210</li>
               <li>Ahmed Faraz — 22K-5185</li>
-              <li>SuhailAhmed — 22I-0859</li>
+              <li>Suhail Ahmed — 22I-0859</li>
             </ul>
           </div>
 
@@ -77,7 +77,7 @@ const Footer = () => {
             <h4 className="text-base font-semibold text-foreground">Connect With Us</h4>
             <div className="flex gap-3">
               <a
-                href="#"
+                href="https://github.com/sharjeel435"
                 className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-background transition-all hover:border-crypto-electric hover:bg-crypto-electric/10"
                 aria-label="Github"
               >
