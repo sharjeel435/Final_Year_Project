@@ -68,7 +68,7 @@ const Footer = () => {
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>Sharjeel Safdar — 22K-4210</li>
               <li>Ahmed Faraz — 22K-5185</li>
-              <li>Sohail Ahmed — 22I-0859</li>
+              <li>SuhailAhmed — 22I-0859</li>
             </ul>
           </div>
 
@@ -96,7 +96,7 @@ const Footer = () => {
                 href="mailto:fastsharjeel18@gmail.com"
                 className="transition-colors hover:text-crypto-electric"
               >
-               fastsharjeel18@gmail.com
+                fastsharjeel18@gmail.com
               </a>
             </p>
           </div>
