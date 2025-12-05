@@ -169,7 +169,7 @@ const Home = () => {
             <p className="text-sm text-muted-foreground">Database</p>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-crypto-electric">OpenAI</div>
+            <div className="text-3xl font-bold text-crypto-electric">Gemini</div>
             <p className="text-sm text-muted-foreground">AI Engine</p>
           </div>
           <div className="text-center">
