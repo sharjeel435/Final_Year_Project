@@ -165,7 +165,7 @@ const Home = () => {
             <p className="text-sm text-muted-foreground">Automation</p>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-crypto-electric">PostgreSQL</div>
+            <div className="text-3xl font-bold text-crypto-electric">SupaBase</div>
             <p className="text-sm text-muted-foreground">Database</p>
           </div>
           <div className="text-center">
