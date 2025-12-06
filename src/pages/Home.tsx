@@ -105,42 +105,54 @@ const Home = () => {
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             <Card className="border-2 border-border bg-background p-6">
-              <Brain className="mb-4 h-10 w-10 text-crypto-electric" />
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-crypto-electric/10">
+                <Brain className="h-6 w-6 text-crypto-electric" />
+              </div>
               <h3 className="mb-2 text-xl font-semibold">AI Recommendations</h3>
               <p className="text-sm text-muted-foreground">
-                Powered by OpenAI to provide personalized, actionable trading advice
+                Powered by Gemini to provide personalized, actionable trading advice
               </p>
             </Card>
             <Card className="border-2 border-border bg-background p-6">
-              <BarChart3 className="mb-4 h-10 w-10 text-crypto-electric" />
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-crypto-electric/10">
+                <BarChart3 className="h-6 w-6 text-crypto-electric" />
+              </div>
               <h3 className="mb-2 text-xl font-semibold">Real-Time Metrics</h3>
               <p className="text-sm text-muted-foreground">
                 12 derived performance indicators calculated from your trading data
               </p>
             </Card>
             <Card className="border-2 border-border bg-background p-6">
-              <Target className="mb-4 h-10 w-10 text-crypto-electric" />
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-crypto-electric/10">
+                <Target className="h-6 w-6 text-crypto-electric" />
+              </div>
               <h3 className="mb-2 text-xl font-semibold">Quiz Engine</h3>
               <p className="text-sm text-muted-foreground">
                 Dynamic 10-question assessment to understand your trading psychology
               </p>
             </Card>
             <Card className="border-2 border-border bg-background p-6">
-              <Mail className="mb-4 h-10 w-10 text-crypto-electric" />
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-crypto-electric/10">
+                <Mail className="h-6 w-6 text-crypto-electric" />
+              </div>
               <h3 className="mb-2 text-xl font-semibold">Email Reports</h3>
               <p className="text-sm text-muted-foreground">
                 Download or email your comprehensive trading analysis report
               </p>
             </Card>
             <Card className="border-2 border-border bg-background p-6">
-              <div className="mb-4 text-2xl font-bold text-crypto-neon">n8n</div>
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-crypto-neon/20">
+                <span className="font-bold text-lg text-crypto-neon">n8n</span>
+              </div>
               <h3 className="mb-2 text-xl font-semibold">Automated Workflows</h3>
               <p className="text-sm text-muted-foreground">
                 Seamless integration with n8n for intelligent automation
               </p>
             </Card>
             <Card className="border-2 border-border bg-background p-6">
-              <div className="mb-4 text-2xl font-bold text-crypto-electric">ML</div>
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-crypto-electric/10">
+                <span className="font-bold text-lg text-crypto-electric">ML</span>
+              </div>
               <h3 className="mb-2 text-xl font-semibold">ML-Ready Backend</h3>
               <p className="text-sm text-muted-foreground">
                 Built for future machine learning enhancements and predictions

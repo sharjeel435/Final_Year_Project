@@ -262,7 +262,7 @@ const Quiz = () => {
             <Card className="border-2 border-border bg-card p-8">
               <div className="mb-8">
                 <h2 className="mb-6 text-xl font-semibold">{questions[currentQuestion].question}</h2>
-                
+
                 <RadioGroup value={answers[currentQuestion] || ""} onValueChange={handleAnswer}>
                   <div className="space-y-3">
                     {questions[currentQuestion].options.map((option, index) => (

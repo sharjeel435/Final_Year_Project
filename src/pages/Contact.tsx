@@ -18,7 +18,7 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.name || !formData.email || !formData.message) {
       toast({
         title: "Missing Information",
@@ -36,7 +36,7 @@ const Contact = () => {
         ...formData,
         created_at: new Date().toISOString(),
       };
-      
+
       const existingContacts = JSON.parse(localStorage.getItem("cryptoquest_contacts") || "[]");
       existingContacts.push(contactData);
       localStorage.setItem("cryptoquest_contacts", JSON.stringify(existingContacts));
@@ -83,7 +83,7 @@ const Contact = () => {
                 </div>
               </div>
               <h3 className="mb-2 font-semibold">Email Us</h3>
-              <p className="text-sm text-muted-foreground">support@cryptoquest.ai</p>
+              <p className="text-sm text-muted-foreground">fastsharjeel18@gmail.com</p>
             </Card>
 
             <Card className="border-2 border-border bg-card p-6 text-center">
@@ -110,7 +110,7 @@ const Contact = () => {
           {/* Contact Form */}
           <Card className="mt-8 border-2 border-border bg-card p-8">
             <h2 className="mb-6 text-2xl font-semibold text-crypto-electric">Send Us a Message</h2>
-            
+
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
                 <Label htmlFor="name">Name *</Label>
@@ -162,7 +162,7 @@ const Contact = () => {
           {/* FAQ Section */}
           <Card className="mt-8 border-2 border-border bg-card p-8">
             <h2 className="mb-6 text-2xl font-semibold text-crypto-electric">Frequently Asked Questions</h2>
-            
+
             <div className="space-y-6">
               <div>
                 <h3 className="mb-2 font-semibold">Is my data secure?</h3>
@@ -187,7 +187,7 @@ const Contact = () => {
               </div>
 
               <div>
-                <h3 className="mb-2 font-semibold">What makes CryptoQuest different?</h3>
+                <h3 className="mb-2 font-semibold">What makes Personalized Crypto different?</h3>
                 <p className="text-sm text-muted-foreground">
                   We combine AI-powered analysis with personalized recommendations tailored to your unique trading profile,
                   rather than providing generic advice.
