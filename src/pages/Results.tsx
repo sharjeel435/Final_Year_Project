@@ -8,8 +8,7 @@ import { Download, Mail, RefreshCw, FileText, TrendingUp, TrendingDown, Target, 
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/components/ui/chart";
 import { BarChart, Bar, CartesianGrid, XAxis, YAxis } from "recharts";
 
-interface DerivedMetrics 
-{
+interface DerivedMetrics {
   win_rate: number;
   failure_rate: number;
   profit_ratio: number;
@@ -79,7 +78,7 @@ const Results = () => {
         quiz_score_normalized: 0,
         composite_performance_score: 0,
       };
-      calculatedMetrics.composite_performance_score = 
+      calculatedMetrics.composite_performance_score =
         (calculatedMetrics.win_rate + calculatedMetrics.trade_efficiency + calculatedMetrics.quiz_score_normalized) / 3;
       setMetrics(calculatedMetrics);
       return;
@@ -87,7 +86,7 @@ const Results = () => {
 
     const userParsed = JSON.parse(user);
     const resultsParsed = JSON.parse(results);
-    
+
     setUserData(userParsed);
     setQuizResults(resultsParsed);
 
@@ -112,10 +111,10 @@ const Results = () => {
     };
 
     // Calculate composite score (average of key metrics)
-    calculatedMetrics.composite_performance_score = 
-      (calculatedMetrics.win_rate + 
-       calculatedMetrics.trade_efficiency + 
-       calculatedMetrics.quiz_score_normalized) / 3;
+    calculatedMetrics.composite_performance_score =
+      (calculatedMetrics.win_rate +
+        calculatedMetrics.trade_efficiency +
+        calculatedMetrics.quiz_score_normalized) / 3;
 
     setMetrics(calculatedMetrics);
   }, [navigate, toast]);
@@ -229,7 +228,7 @@ const Results = () => {
     })();
   }, [metrics, quizResults]);
 
-  
+
 
   const handleDownloadPDF = () => {
     try {
@@ -268,16 +267,16 @@ const Results = () => {
     const recs = (aiRecommendations && aiRecommendations.length)
       ? aiRecommendations
       : [
-          "Focus on improving your win rate by refining entry and exit strategies",
-          "Implement strict risk management to reduce loss ratio",
-          "Continue learning through educational resources to enhance trading psychology",
-        ];
+        "Focus on improving your win rate by refining entry and exit strategies",
+        "Implement strict risk management to reduce loss ratio",
+        "Continue learning through educational resources to enhance trading psychology",
+      ];
     const resources = (aiResources && aiResources.length)
       ? aiResources
       : [
-          "CoinMarketCap Academy - Comprehensive crypto trading courses",
-          "TradingView - Advanced charting and technical analysis tools",
-        ];
+        "CoinMarketCap Academy - Comprehensive crypto trading courses",
+        "TradingView - Advanced charting and technical analysis tools",
+      ];
     const exercise = aiExercise || "This week, track your emotional state before, during, and after each trade. Identify patterns between emotions and trade outcomes.";
     const highlights = [
       `• Win Rate: ${metrics.win_rate.toFixed(1)}% 📈`,
@@ -445,16 +444,16 @@ const Results = () => {
                 quiz: { label: "Quiz", color: "hsl(var(--primary))" },
               }}
             >
-              <BarChart data={[{ name: "Scores", win: metrics.win_rate, fail: metrics.failure_rate, eff: metrics.trade_efficiency, quiz: metrics.quiz_score_normalized }]}> 
+              <BarChart data={[{ name: "Scores", win: metrics.win_rate, fail: metrics.failure_rate, eff: metrics.trade_efficiency, quiz: metrics.quiz_score_normalized }]}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis domain={[0, 100]} />
                 <ChartTooltip content={<ChartTooltipContent />} />
                 <ChartLegend content={<ChartLegendContent />} />
-                <Bar dataKey="win" fill="var(--color-win)" radius={[4,4,0,0]} />
-                <Bar dataKey="fail" fill="var(--color-fail)" radius={[4,4,0,0]} />
-                <Bar dataKey="eff" fill="var(--color-eff)" radius={[4,4,0,0]} />
-                <Bar dataKey="quiz" fill="var(--color-quiz)" radius={[4,4,0,0]} />
+                <Bar dataKey="win" fill="var(--color-win)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="fail" fill="var(--color-fail)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="eff" fill="var(--color-eff)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="quiz" fill="var(--color-quiz)" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ChartContainer>
           </Card>
@@ -542,7 +541,7 @@ const Results = () => {
             </Button>
           </div>
 
-          
+
         </div>
       </div>
     </div>
