@@ -341,6 +341,17 @@ const Results = () => {
   const level = userData.exp || "Beginner";
   const successProbability = metrics.composite_performance_score / 100;
 
+  // Enhanced Radar Data
+  const radarData = [
+    { subject: 'Win Rate', A: Math.max(0, metrics.win_rate), fullMark: 100 },
+    { subject: 'Efficiency', A: Math.max(0, metrics.trade_efficiency), fullMark: 100 },
+    { subject: 'Quiz', A: metrics.quiz_score_normalized, fullMark: 100 },
+    { subject: 'Profit Ratio', A: metrics.profit_ratio, fullMark: 100 },
+    { subject: 'Consistency', A: Math.min(100, Math.max(0, 100 - metrics.failure_rate)), fullMark: 100 },
+  ];
+
+  const isProfitable = metrics.net_performance >= 0;
+
   return (
     <div className="min-h-screen bg-background py-12" ref={printRef}>
       <div className="container mx-auto px-4">
@@ -519,6 +530,135 @@ const Results = () => {
             </Card>
           </div>
 
+          {/* Decomposition Tree & Metrics Matrix */}
+          <div className="grid gap-6 md:grid-cols-2 mb-8">
+            <Card className="bg-[#020617] p-6 border border-slate-800 shadow-2xl relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent pointer-events-none"></div>
+              <h3 className="mb-8 text-xl font-semibold text-cyan-400 flex items-center gap-2 relative z-10">
+                Decomposition Tree <span className="text-xl">🌳</span>
+              </h3>
+              <div className="flex flex-col items-center gap-8 relative z-10 pb-4">
+                {/* Level 1: Main Goal */}
+                <div className="flex flex-col items-center">
+                  <div className="border border-cyan-400 bg-slate-950/80 p-4 rounded-xl text-center min-w-[160px] shadow-[0_0_20px_rgba(34,211,238,0.15)] backdrop-blur-sm relative group overflow-hidden">
+                    <div className="absolute inset-0 bg-cyan-400/5 group-hover:bg-cyan-400/10 transition-colors"></div>
+                    <p className="text-[10px] text-cyan-200 uppercase tracking-[0.2em] mb-1 font-medium">Composite</p>
+                    <p className="text-3xl font-bold text-white tracking-tight">{metrics.composite_performance_score.toFixed(1)}%</p>
+                  </div>
+                  <div className="h-8 w-px bg-gradient-to-b from-cyan-900 to-slate-800"></div>
+                </div>
+
+                {/* Level 2: Primary Drivers */}
+                <div className="flex justify-center gap-4 w-full relative z-10">
+                  {/* Branch A: Win Rate */}
+                  <div className="flex flex-col items-center">
+                    <div className="absolute w-[34%] h-px border-t border-slate-700 top-[-33px] right-[50%] rounded-tl-xl pointer-events-none transform translate-y-8"></div>
+                    <div className="border border-cyan-500/50 bg-slate-950/60 p-2 rounded-lg text-center min-w-[100px] shadow-[0_0_15px_rgba(6,182,212,0.1)] relative group">
+                      <div className="absolute top-[-33px] left-1/2 w-px h-8 bg-slate-700"></div>
+                      <div className="absolute inset-0 bg-cyan-500/5 group-hover:bg-cyan-500/10 transition-colors rounded-lg"></div>
+                      <p className="text-[9px] text-cyan-200/70 font-medium mb-0.5">Win Rate</p>
+                      <p className="text-base font-bold text-cyan-400">{metrics.win_rate.toFixed(0)}%</p>
+                    </div>
+                    <div className="h-4 w-px bg-slate-800 my-1"></div>
+                    <div className="bg-slate-900/50 border border-slate-800 p-1.5 rounded-md text-center min-w-[70px]">
+                      <p className="text-[8px] text-slate-400">Trades</p>
+                      <p className="text-xs font-semibold text-slate-200">{userData?.success_trades}/{userData?.no_of_trade}</p>
+                    </div>
+                  </div>
+
+                  {/* Branch B: Efficiency */}
+                  <div className="flex flex-col items-center">
+                    <div className="border border-emerald-500/50 bg-slate-950/60 p-2 rounded-lg text-center min-w-[100px] shadow-[0_0_15px_rgba(16,185,129,0.1)] relative group">
+                      <div className="absolute top-[-33px] left-1/2 w-px h-8 bg-slate-700"></div>
+                      <div className="absolute inset-0 bg-emerald-500/5 group-hover:bg-emerald-500/10 transition-colors rounded-lg"></div>
+                      <p className="text-[9px] text-emerald-200/70 font-medium mb-0.5">Efficiency</p>
+                      <p className="text-base font-bold text-emerald-400">{metrics.trade_efficiency.toFixed(0)}%</p>
+                    </div>
+                    <div className="h-4 w-px bg-slate-800 my-1"></div>
+                    <div className="bg-slate-900/50 border border-slate-800 p-1.5 rounded-md text-center min-w-[70px]">
+                      <p className="text-[8px] text-slate-400">Net</p>
+                      <p className="text-xs font-semibold text-slate-200">{(userData?.success_trades || 0) - (userData?.failed_trades || 0)}</p>
+                    </div>
+                  </div>
+
+                  {/* Branch C: Quiz Score */}
+                  <div className="flex flex-col items-center">
+                    <div className="absolute w-[34%] h-px border-t border-slate-700 top-[-33px] left-[50%] rounded-tr-xl pointer-events-none transform translate-y-8"></div>
+                    <div className="border border-purple-500/50 bg-slate-950/60 p-2 rounded-lg text-center min-w-[100px] shadow-[0_0_15px_rgba(168,85,247,0.1)] relative group">
+                      <div className="absolute top-[-33px] left-1/2 w-px h-8 bg-slate-700"></div>
+                      <div className="absolute inset-0 bg-purple-500/5 group-hover:bg-purple-500/10 transition-colors rounded-lg"></div>
+                      <p className="text-[9px] text-purple-200/70 font-medium mb-0.5">Quiz</p>
+                      <p className="text-base font-bold text-purple-400">{metrics.quiz_score_normalized.toFixed(0)}%</p>
+                    </div>
+                    <div className="h-4 w-px bg-slate-800 my-1"></div>
+                    <div className="bg-slate-900/50 border border-slate-800 p-1.5 rounded-md text-center min-w-[70px]">
+                      <p className="text-[8px] text-slate-400">Score</p>
+                      <p className="text-xs font-semibold text-slate-200">{quizResults?.quiz_score}/10</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+
+            <Card className="border-2 border-border bg-card p-6">
+              <h3 className="mb-6 text-xl font-semibold text-crypto-neon">Metrics Matrix 🔢</h3>
+              <div className="w-full overflow-hidden rounded-lg border border-border">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="bg-muted/50 text-muted-foreground text-left">
+                      <th className="p-3 font-medium">Metric</th>
+                      <th className="p-3 font-medium text-center">My Stats</th>
+                      <th className="p-3 font-medium text-center">Target</th>
+                      <th className="p-3 font-medium text-center">Avg</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    <tr className="group hover:bg-muted/30 transition-colors">
+                      <td className="p-3 font-medium text-foreground">Win Rate</td>
+                      <td className={`p-3 text-center font-bold ${metrics.win_rate >= 60 ? 'text-crypto-electric' : 'text-destructive'}`}>
+                        {metrics.win_rate.toFixed(1)}%
+                      </td>
+                      <td className="p-3 text-center text-muted-foreground">60.0%</td>
+                      <td className="p-3 text-center text-muted-foreground">45.0%</td>
+                    </tr>
+                    <tr className="group hover:bg-muted/30 transition-colors">
+                      <td className="p-3 font-medium text-foreground">Efficiency</td>
+                      <td className={`p-3 text-center font-bold ${metrics.trade_efficiency >= 50 ? 'text-crypto-neon' : 'text-muted-foreground'}`}>
+                        {metrics.trade_efficiency.toFixed(1)}%
+                      </td>
+                      <td className="p-3 text-center text-muted-foreground">50.0%</td>
+                      <td className="p-3 text-center text-muted-foreground">30.0%</td>
+                    </tr>
+                    <tr className="group hover:bg-muted/30 transition-colors">
+                      <td className="p-3 font-medium text-foreground">Profit Ratio</td>
+                      <td className={`p-3 text-center font-bold ${metrics.profit_ratio >= 70 ? 'text-primary' : 'text-muted-foreground'}`}>
+                        {metrics.profit_ratio.toFixed(1)}%
+                      </td>
+                      <td className="p-3 text-center text-muted-foreground">70.0%</td>
+                      <td className="p-3 text-center text-muted-foreground">55.0%</td>
+                    </tr>
+                    <tr className="group hover:bg-muted/30 transition-colors">
+                      <td className="p-3 font-medium text-foreground">Failure Rate</td>
+                      <td className={`p-3 text-center font-bold ${metrics.failure_rate <= 30 ? 'text-crypto-electric' : 'text-destructive'}`}>
+                        {metrics.failure_rate.toFixed(1)}%
+                      </td>
+                      <td className="p-3 text-center text-muted-foreground">&lt;30%</td>
+                      <td className="p-3 text-center text-muted-foreground">40.0%</td>
+                    </tr>
+                    <tr className="group hover:bg-muted/30 transition-colors">
+                      <td className="p-3 font-medium text-foreground">Quiz Score</td>
+                      <td className={`p-3 text-center font-bold ${metrics.quiz_score_normalized >= 80 ? 'text-crypto-neon' : 'text-muted-foreground'}`}>
+                        {metrics.quiz_score_normalized.toFixed(0)}%
+                      </td>
+                      <td className="p-3 text-center text-muted-foreground">80%</td>
+                      <td className="p-3 text-center text-muted-foreground">60%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </Card>
+          </div>
+
           {/* Composite Performance Score */}
           <Card className="mb-8 border-2 border-border bg-card p-6">
             <h3 className="mb-4 text-xl font-semibold text-crypto-neon">Composite Performance Score ⭐</h3>
@@ -601,8 +741,6 @@ const Results = () => {
               </a>
             </Button>
           </div>
-
-
         </div>
       </div>
     </div>
