@@ -6,7 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { Download, Mail, RefreshCw, FileText, TrendingUp, TrendingDown, Target, Zap } from "lucide-react";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/components/ui/chart";
-import { BarChart, Bar, CartesianGrid, XAxis, YAxis } from "recharts";
+import { BarChart, Bar, CartesianGrid, XAxis, YAxis, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer } from "recharts";
 
 interface DerivedMetrics {
   win_rate: number;
@@ -433,30 +433,91 @@ const Results = () => {
             />
           </div>
 
-          <Card className="mb-8 border-2 border-border bg-card p-6">
-            <h3 className="mb-4 text-xl font-semibold text-crypto-electric">Performance Overview 📈</h3>
-            <ChartContainer
-              className="w-full"
-              config={{
-                win: { label: "Win", color: "hsl(var(--crypto-electric))" },
-                fail: { label: "Fail", color: "hsl(var(--destructive))" },
-                eff: { label: "Efficiency", color: "hsl(var(--accent))" },
-                quiz: { label: "Quiz", color: "hsl(var(--primary))" },
-              }}
-            >
-              <BarChart data={[{ name: "Scores", win: metrics.win_rate, fail: metrics.failure_rate, eff: metrics.trade_efficiency, quiz: metrics.quiz_score_normalized }]}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis domain={[0, 100]} />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <ChartLegend content={<ChartLegendContent />} />
-                <Bar dataKey="win" fill="var(--color-win)" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="fail" fill="var(--color-fail)" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="eff" fill="var(--color-eff)" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="quiz" fill="var(--color-quiz)" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ChartContainer>
-          </Card>
+          <div className="grid gap-6 md:grid-cols-2 mb-8">
+            <Card className="border-2 border-border bg-card p-6">
+              <h3 className="mb-4 text-xl font-semibold text-crypto-electric">Performance Overview 📊</h3>
+              <ChartContainer
+                className="w-full aspect-square max-h-[300px]"
+                config={{
+                  win: { label: "Win Rate", color: "hsl(var(--crypto-electric))" },
+                  fail: { label: "Fail Rate", color: "hsl(var(--destructive))" },
+                  eff: { label: "Efficiency", color: "hsl(var(--crypto-neon))" },
+                  quiz: { label: "Quiz", color: "hsl(var(--primary))" },
+                }}
+              >
+                <BarChart accessibilityLayer data={[{ name: "Metrics", win: metrics.win_rate, fail: metrics.failure_rate, eff: metrics.trade_efficiency, quiz: metrics.quiz_score_normalized }]}>
+                  <defs>
+                    <linearGradient id="colorWin" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="var(--color-win)" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="var(--color-win)" stopOpacity={0.1} />
+                    </linearGradient>
+                    <linearGradient id="colorFail" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="var(--color-fail)" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="var(--color-fail)" stopOpacity={0.1} />
+                    </linearGradient>
+                    <linearGradient id="colorEff" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="var(--color-eff)" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="var(--color-eff)" stopOpacity={0.1} />
+                    </linearGradient>
+                    <linearGradient id="colorQuiz" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="var(--color-quiz)" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="var(--color-quiz)" stopOpacity={0.1} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="hsl(var(--muted-foreground))" opacity={0.3} />
+                  <XAxis
+                    dataKey="name"
+                    tickLine={false}
+                    tickMargin={10}
+                    axisLine={false}
+                    hide
+                  />
+                  <YAxis domain={[0, 100]} hide />
+                  <ChartTooltip content={<ChartTooltipContent indicator="dashed" />} />
+                  <ChartLegend content={<ChartLegendContent />} />
+                  <Bar dataKey="win" fill="url(#colorWin)" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="fail" fill="url(#colorFail)" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="eff" fill="url(#colorEff)" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="quiz" fill="url(#colorQuiz)" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ChartContainer>
+            </Card>
+
+            <Card className="border-2 border-border bg-card p-6">
+              <h3 className="mb-4 text-xl font-semibold text-crypto-neon">Skill Balance 🕸️</h3>
+              <ChartContainer
+                className="w-full aspect-square max-h-[300px]"
+                config={{
+                  win: { label: "Win Rate", color: "hsl(var(--crypto-electric))" },
+                  eff: { label: "Efficiency", color: "hsl(var(--crypto-neon))" },
+                  quiz: { label: "Quiz", color: "hsl(var(--primary))" },
+                  profit: { label: "Profit Ratio", color: "hsl(var(--accent))" },
+                  cons: { label: "Consistency", color: "hsl(var(--muted-foreground))" },
+                }}
+              >
+                <RadarChart cx="50%" cy="50%" outerRadius="70%" data={[
+                  { subject: 'Win Rate', A: Math.max(0, metrics.win_rate), fullMark: 100 },
+                  { subject: 'Efficiency', A: Math.max(0, metrics.trade_efficiency + 100) / 2, fullMark: 100 },
+                  { subject: 'Quiz', A: metrics.quiz_score_normalized, fullMark: 100 },
+                  { subject: 'Profit Ratio', A: metrics.profit_ratio, fullMark: 100 },
+                  { subject: 'Consistency', A: Math.min(100, Math.max(0, 100 - metrics.failure_rate)), fullMark: 100 },
+                ]}>
+                  <PolarGrid stroke="hsl(var(--muted-foreground))" opacity={0.3} />
+                  <PolarAngleAxis dataKey="subject" tick={{ fill: "hsl(var(--foreground))", fontSize: 12 }} />
+                  <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
+                  <Radar
+                    name="My Stats"
+                    dataKey="A"
+                    stroke="hsl(var(--crypto-neon))"
+                    strokeWidth={3}
+                    fill="hsl(var(--crypto-neon))"
+                    fillOpacity={0.3}
+                  />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                </RadarChart>
+              </ChartContainer>
+            </Card>
+          </div>
 
           {/* Composite Performance Score */}
           <Card className="mb-8 border-2 border-border bg-card p-6">
