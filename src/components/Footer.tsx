@@ -13,7 +13,7 @@ const Footer = () => {
             <Link to="/" className="inline-block">
               <h3 className="text-xl sm:text-2xl font-bold">
                 <span className="bg-gradient-to-r from-crypto-electric to-crypto-neon bg-clip-text text-transparent">
-                  Personlized Crypto
+                  Personalized Crypto
                 </span>
               </h3>
             </Link>
@@ -106,7 +106,7 @@ const Footer = () => {
         <div className="mt-8 border-t border-border pt-6">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <p className="text-sm text-muted-foreground text-center sm:text-left">
-              © {currentYear} Personlized Crypto. All rights reserved.
+              © {currentYear} Personalized Crypto. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm">
               <a

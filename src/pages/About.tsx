@@ -9,7 +9,7 @@ const About = () => {
           <div className="mb-12 text-center">
             <h1 className="mb-4 text-4xl font-bold md:text-5xl">
               <span className="bg-gradient-to-r from-crypto-electric to-crypto-neon bg-clip-text text-transparent">
-                Personlized Crypto
+                Personalized Crypto
               </span>
             </h1>
             <p className="text-lg text-muted-foreground">
@@ -26,7 +26,7 @@ const About = () => {
               <h2 className="text-2xl font-semibold text-crypto-electric">Our Mission</h2>
             </div>
             <p className="mb-4 text-muted-foreground">
-              Personlized Crypto is an AI-powered personalized system designed to help crypto traders of all levels
+              Personalized Crypto is an AI-powered personalized system designed to help crypto traders of all levels
               understand their trading patterns, identify areas for improvement, and receive actionable
               recommendations tailored to their unique profile.
             </p>
@@ -123,7 +123,7 @@ const About = () => {
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-crypto-neon/20">
                 <Activity className="h-6 w-6 text-crypto-neon" />
               </div>
-              <h2 className="text-2xl font-semibold text-crypto-electric">How Personlized Crypto Works</h2>
+              <h2 className="text-2xl font-semibold text-crypto-electric">How Personalized Crypto Works</h2>
             </div>
 
             <div className="space-y-6">
@@ -199,7 +199,7 @@ const About = () => {
                 </div>
                 <h3 className="mb-3 text-lg font-semibold text-crypto-electric group-hover:text-crypto-neon transition-colors">AI Engine</h3>
                 <p className="text-sm text-muted-foreground">
-                  Powered by Gemini's GPT models for intelligent analysis and personalized recommendation generation.
+                  Powered by Gemini's advanced models for intelligent analysis and personalized recommendation generation.
                 </p>
               </div>
 

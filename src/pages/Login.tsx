@@ -86,7 +86,7 @@ const Login = () => {
         <div className="order-2 md:order-1 text-center md:text-left space-y-4">
           <h1 className="text-3xl sm:text-4xl font-bold">
             <span className="bg-gradient-to-r from-crypto-electric to-crypto-neon bg-clip-text text-transparent">
-              Sign in to Personlized Crypto
+              Sign in to Personalized Crypto
             </span>
           </h1>
           <p className="text-muted-foreground max-w-md mx-auto md:mx-0">
@@ -95,7 +95,7 @@ const Login = () => {
           <div className="flex justify-center md:justify-start">
             <Link to="/signup">
               <Button variant="outline" className="rounded-full border-crypto-electric text-crypto-electric hover:bg-crypto-electric/10">
-                Sign Up on Personlized Crypto
+                Sign Up on Personalized Crypto
               </Button>
             </Link>
           </div>

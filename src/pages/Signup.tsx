@@ -83,7 +83,7 @@ const Signup = () => {
           <h1 className="text-3xl sm:text-4xl font-bold">
             <span className="bg-gradient-to-r from-crypto-electric to-crypto-neon bg-clip-text text-transparent">Create Account</span>
           </h1>
-          <p className="text-muted-foreground max-w-md mx-auto md:mx-0">Join Personlized Crypto to access personalized trading tools and insights.</p>
+          <p className="text-muted-foreground max-w-md mx-auto md:mx-0">Join Personalized Crypto to access personalized trading tools and insights.</p>
           <p className="text-sm text-muted-foreground">Already have an account? <Link to="/login" className="text-crypto-electric underline">Sign in</Link></p>
         </div>
 

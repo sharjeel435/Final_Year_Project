@@ -15,7 +15,7 @@ const Home = () => {
           <div className="mx-auto max-w-4xl text-center">
             <h1 className="mb-4 sm:mb-6 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
               <span className="bg-gradient-to-r from-crypto-electric to-crypto-neon bg-clip-text text-transparent">
-                Personlized Crypto
+                Personalized Crypto
               </span>
             </h1>
             <p className="mb-3 sm:mb-4 text-lg sm:text-xl md:text-2xl text-muted-foreground px-4">
@@ -177,7 +177,7 @@ const Home = () => {
             <p className="text-sm text-muted-foreground">Automation</p>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-crypto-electric">SupaBase</div>
+            <div className="text-3xl font-bold text-crypto-electric">Supabase</div>
             <p className="text-sm text-muted-foreground">Database</p>
           </div>
           <div className="text-center">

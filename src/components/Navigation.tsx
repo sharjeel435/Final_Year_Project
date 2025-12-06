@@ -24,7 +24,7 @@ const Navigation = () => {
         <div className="flex h-16 items-center justify-between">
           <Link to="/" className="text-xl sm:text-2xl font-bold">
             <span className="bg-gradient-to-r from-crypto-electric to-crypto-neon bg-clip-text text-transparent">
-              Personlized Crypto
+              Personalized Crypto
             </span>
           </Link>
 
@@ -34,9 +34,8 @@ const Navigation = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`text-sm font-medium transition-colors hover:text-crypto-electric ${
-                  isActive(item.path) ? "text-crypto-electric" : "text-foreground"
-                }`}
+                className={`text-sm font-medium transition-colors hover:text-crypto-electric ${isActive(item.path) ? "text-crypto-electric" : "text-foreground"
+                  }`}
               >
                 {item.label}
               </Link>
@@ -57,9 +56,8 @@ const Navigation = () => {
                     key={item.path}
                     to={item.path}
                     onClick={() => setOpen(false)}
-                    className={`text-lg font-medium transition-colors hover:text-crypto-electric ${
-                      isActive(item.path) ? "text-crypto-electric" : "text-foreground"
-                    }`}
+                    className={`text-lg font-medium transition-colors hover:text-crypto-electric ${isActive(item.path) ? "text-crypto-electric" : "text-foreground"
+                      }`}
                   >
                     {item.label}
                   </Link>
